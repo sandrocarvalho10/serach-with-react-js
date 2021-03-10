@@ -1,24 +1,45 @@
-import logo from './logo.svg';
+import { Container } from 'react-bootstrap';
 import './App.css';
+import ListItem from './components/ListItem';
+import styled from 'styled-components';
+import { useEffect, useState } from 'react';
+import { getBooks } from './components/mock/BookService';
+import SearchBar from './components/SearchBar';
+ 
+const ListContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  background-color: #ccc;
+  padding: 10px;
+`;
+ 
 
 function App() {
+  const [books, setBooks] = useState([]);
+ 
+  useEffect(() => {
+    setBooks(getBooks());
+  }, [])
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+   <Container>
+     <h1>LuizTools Books</h1>
+      <hr />
+      <SearchBar setBooks={setBooks}/>
+     <ListContainer>
+      {books.map(book => {
+          return (
+            <ListItem
+              key={book.url}
+              title={book.title}
+              image={book.image}
+              price={book.price}
+              url={book.url}
+            />
+          )
+        })}
+     </ListContainer>
+   </Container>
   );
 }
 
